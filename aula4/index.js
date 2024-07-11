@@ -25,4 +25,4 @@ async function walk (files, rootdir) {
     }
 }
 
-readdir()
+readdir();
