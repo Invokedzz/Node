@@ -27,6 +27,7 @@ const sessionOptions = session({
 
 app.use(sessionOptions);
 app.use(flash());
+//app.use(middlewareGlobal)
 
 app.use(express.urlencoded({ extended: true }));
 
