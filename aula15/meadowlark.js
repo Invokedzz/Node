@@ -1,20 +1,39 @@
 const express = require('express');
 const app = express();
+const { engine } = require('express-handlebars');
 const port = process.env.PORT || 3000;
+const fortune = require('./library/fortune');
 
-app.use((req, res, err) => {
-    res.type('text/plain');
-    res.status(500);
-    res.send('Deu 500 logo você sucumbiu');
-    console.error(err);
+app.engine('handlebars', engine({
+    defaultLayout: 'main',
+}));
+
+app.set('view engine', 'handlebars');
+
+app.get('/', (req, res) => {
+    res.render('home');
 });
 
-app.use((req, res) => {
-    res.type('text/plain');
-    res.status(404);
-    res.send('Deu 404, logo você sucumbiu também');
-})
+app.get('/about', (req, res) => {
+    res.render('about', {fortune: fortune.getFortune()});
+});
 
-app.listen(port, () => {
-    console.log(`The server is online at http://localhost:${port}`);
+/* res.render('about', { fortune: fortune.getFortune() }): Renderiza o template about.handlebars, passando um objeto com uma chave fortune. O valor de fortune é obtido chamando fortune.getFortune(), que retorna uma mensagem aleatória de fortuna. */
+
+app.use((req, res, err) => {
+    if (err) {
+        res.render('404');
+        res.status(404);
+        console.error(err);
+        return;
+    }
+
+    return app.get('/', (req, res) => {
+        res.render('home');
+    });
+
+});
+
+app.listen(port, function () {
+    console.log(`Iniciar o server em ${port}`);
 });
