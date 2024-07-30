@@ -1,3 +1,6 @@
 exports.mainPage = (req, res) => res.render('casa');
 exports.abt = (req, res) => res.render('sobre');
-exports.error = (err, req, res, next) => res.render('erro');
+exports.error = (req, res, next => {
+    res.status(404);
+    res.send('Deu erro aqui');
+});

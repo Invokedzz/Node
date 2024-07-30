@@ -1,4 +1,4 @@
-// npm install --save-dev puppeteer; npm install --save-dev portfinder; npm install --save-dev jest; "test": "jest" (nos scripts);  npm test -- --watch => Comandos importantes!!
+// npm install --save-dev puppeteer; npm install --save-dev portfinder; npm install --save-dev jest; "test": "jest" (nos scripts);  npm test -- --watch; npm test --coverage => Comandos importantes!!
 
 
 const express = require('express');
