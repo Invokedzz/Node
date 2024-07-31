@@ -17,7 +17,17 @@ test('about page renders with fortune', () => {
     }));
 });
 
-test('500 handler renders', () => {
+test('NotFound test', () => {
+    const error = new Error('Error 404');
+    const req = {};
+    const res = {render: jest.fn()};
+    const next = jest.fn();
+    handlers.notFound(error, req, res, next);
+    expect(res.render.mock.calls[0][0]).toBe('404');
+    expect(res.render.mock.calls.length).toBe(1);
+});
+
+test('serverError test', () => {
     const err = new Error('random error');
     const req = {};
     const res = {render: jest.fn()};
