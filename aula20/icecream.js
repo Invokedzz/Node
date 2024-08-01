@@ -20,6 +20,10 @@ app.set('view engine', 'handlebars');
 app.get('/', handlers.Home);
 app.get('/contact', handlers.Contact);
 
-app.listen(port, function () {
-    console.log(`Access http://localhost:${port}`);
-});
+if (require.main === module) {
+    app.listen(port, function () {
+        console.log(`Access http://localhost:${port}`);
+    });
+}
+
+if (require.main !== module) module.exports = app;
