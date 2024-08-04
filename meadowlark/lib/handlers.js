@@ -34,6 +34,14 @@ exports.vacationPhotoContestProcess = (req, res, fields, files) => {
         res.redirect(303, '/contest/vacation-photo-thank-you');
 }
 
+exports.vacationPhotoContestProcessError = (req, res, next) => {
+    res.render('contest/vacation-photo-error')
+}
+
+exports.vacationPhotoContestProcessThankYou = (req, res) => {
+    res.render('contest/vacation-photo-thank-you')
+  }
+
 exports.newsletterSignupThankYou = (req, res) => res.render('newsletter-signup-thank-you');
 
 exports.newsletter = (req, res) => res.render('newsletter', {csrf: 'CSRF token goes here'});
