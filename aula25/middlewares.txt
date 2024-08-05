@@ -1,0 +1,26 @@
+Entendendo Middlewares:
+
+
+Conceitualmente, middleware é uma maneira de encapsular
+funcionalidades – para ser mais específico, funcionalidades que
+operem em uma requisição HTTP feita para a aplicação. Na prática,
+middleware é simplesmente uma função que recebe três
+argumentos: um objeto de requisição, um objeto de resposta e uma
+função next();
+
+É isso
+que a função next passada para cada middleware faz: se você não
+chamar next(), a requisição terminará no middleware atual.
+
+Princípios do Middleware:
+
+Os manipuladores de rota (app.get, app.post etc. – com frequência
+chamados coletivamente de app.METHOD) podem ser
+considerados como o middleware que manipula um verbo HTTP
+específico (GET, POST etc.)
+
+Os manipuladores de rota requerem um path como primeiro
+parâmetro. Se quiser que o path sirva para qualquer rota, use \*.
+O middleware também pode receber um path como primeiro
+parâmetro, mas isso é opcional (se for omitido, qualquer path
+servirá, como se tivéssemos especificado *).
