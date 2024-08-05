@@ -1,17 +1,45 @@
-const fortune = require('./fortune');
+const VALID_EMAIL_REGEX = new RegExp('^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@' +
+    '[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?' +
+    '(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$');
+
+// Fake "newsletter signup interface":
+
+/*class NewsletterSignup {
+    constructor({name, email}) {
+        this.name = name;
+        this.email = email;
+    }
+
+    async save() {
+        // Seria aqui onde teríamos o trabalho de salvar o banco de dados. Já que o método é assíncrono, iria retornar uma Promise. E já que não estamos retornando nenhum erro, ele iria resolver.
+    }
+
+} */
 
 exports.home = (req, res) => res.render('home');
-
-exports.about = (req, res) => res.render('about', {fortune: fortune.getFortune()});
 
 exports.newsletterSignup = (req, res) => res.render('newsletter-signup', {csrf: 'CSRF token goes here'});
 
 exports.newsletterSignupProcess = (req, res) => {
-    console.log('Form: ' + req.query.form);
-    console.log('CSRF token (from hidden form field: ' + req.body._csrf);
-    console.log('Name (from visible form field: ' + req.body.name);
-    console.log('Email (from visible form field: ' + req.body.email);
-    res.redirect(303, '/newsletter-signup/thank-you');
+    const { email } = req.body;
+    if (!VALID_EMAIL_REGEX.test(email)) {
+        req.session.flash = {
+            type: 'danger',
+            intro: 'Validation error!',
+            message: 'The email address you sent was not valid',
+        };
+        return res.redirect(303, '/newsletter-signup');
+    }
+
+    if (VALID_EMAIL_REGEX.test(email)) {
+        req.session.flash = {
+            type: 'success',
+            intro: 'Thanks!',
+            message: 'You have been signed for the newsletter',
+        }
+        return res.redirect(303, '/newsletter-signup/thank-you');
+    } 
+
 }
 
 exports.api = {
@@ -48,9 +76,31 @@ exports.newsletter = (req, res) => res.render('newsletter', {csrf: 'CSRF token g
 
 exports.sectionTest = (req, res) => res.render('00-home');
 
-exports.notFound = (error, req, res, next) => res.render('404');
+/*exports.notFound = (req, res, next) => res.status(404).render('404');
 
-exports.serverError = (err, req, res, next) => res.render('505');
-
+exports.serverError = (err, req, res, next) => {
+    console.error(err.stack); // Log de erro
+    res.status(500).render('505');
+};
+*/
 
 // O argumento "next" serve para indicar uma funcionalidade de "erro" para o Express.
+
+/* new NewsletterSignup({ name, email }).save()
+.then(() => {
+  req.session.flash = {
+    type: 'success',
+    intro: 'Thank you!',
+    message: 'You have now been signed up for the newsletter.',
+  }
+  return res.redirect(303, '/newsletter-archive')
+})
+.catch(err => {
+  req.session.flash = {
+    type: 'danger',
+    intro: 'Database error!',
+    message: 'There was a database error; please try again later.',
+  }
+  return res.redirect(303, '/newsletter-archive')
+})
+} Quando formos utilizar a class */
